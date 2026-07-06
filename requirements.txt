@@ -1,0 +1,16 @@
+# Runtime dependencies (NO ultralytics, NO torch at runtime)
+# Use the GPU build on NVIDIA hosts. CPU-only machines can swap this back to `onnxruntime`.
+onnxruntime-gpu>=1.25.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+supervision>=0.21.0
+fastapi>=0.115.0
+uvicorn>=0.30.0
+PyYAML>=6.0.0
+python-multipart>=0.0.9
+
+# One-time export only (run export_model.py once, then removable)
+# ultralytics>=8.3.0
+# torch>=2.0.0
+# onnx>=1.21.0
+# onnxslim>=0.1.92

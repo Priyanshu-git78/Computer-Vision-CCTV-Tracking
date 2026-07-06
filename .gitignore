@@ -1,0 +1,32 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+.venv/
+.venv-linux/
+venv/
+ENV/
+env/
+
+# ML/DL Model Weights (Too large for GitHub)
+*.pt
+*.onnx
+yolo*.pt
+yolov*.pt
+yolo*.onnx
+
+# Application Logs
+*.log
+streamlit_*_live.log
+streamlit_*.log
+
+# Outputs & Temporary Data
+outputs/
+output/
+
+# OS/IDE configs
+.DS_Store
+.vscode/
+.idea/
