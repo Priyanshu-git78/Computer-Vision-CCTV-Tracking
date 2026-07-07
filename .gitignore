@@ -3,30 +3,41 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual Environment
+# Environments
 .venv/
-.venv-linux/
 venv/
 ENV/
 env/
 
-# ML/DL Model Weights (Too large for GitHub)
+# Data and Models
+data/raw/*
+data/processed/*
+data/annotations/*
+data/*.zip
+data/coco128_dataset/
+data/real_fire_dataset/
+data/fire_dataset/
+!data/**/.gitkeep
+models/**/*.pt
+models/**/*.onnx
+models/**/*.engine
 *.pt
-*.onnx
-yolo*.pt
-yolov*.pt
-yolo*.onnx
 
-# Application Logs
-*.log
-streamlit_*_live.log
-streamlit_*.log
+# Outputs
+outputs/events/*
+outputs/clips/*
+outputs/metrics/*
+outputs/trajectories/*
+outputs/reports/*
+outputs/train/
+outputs/test_predictions/
+!outputs/**/.gitkeep
 
-# Outputs & Temporary Data
-outputs/
-output/
-
-# OS/IDE configs
-.DS_Store
+# IDE and OS files
 .vscode/
 .idea/
+.DS_Store
+*.swp
+
+# Environment variables
+.env

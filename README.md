@@ -1,137 +1,129 @@
-# CCTV Shop Analytics System
+# AI-Powered Intelligent Security Ecosystem for Experience Centers
 
-A lightweight, deployable retail analytics project that combines Ultralytics YOLO11 X for person detection, ByteTrack for identity tracking, OpenCV for video processing, and Streamlit for an interactive shop-owner dashboard.
+This project converts CCTV/video streams in experience centers into an intelligent security and customer-behavior analytics system. It includes two parallel computer vision pipelines:
+1. **Baseline System**: Fixed FPS frame sampling with continuous inference of all models (detection, tracking, and specialist models).
+2. **Adaptive System**: Scene activity-based adaptive sampling, lightweight detector, and contextual specialist activation triggers to optimize GPU resources.
 
-## Features
+---
 
-- Webcam or CCTV video file input
-- RTSP stream support
-- Multi-camera ready pipeline design driven by `config.yaml`
-- YOLO11 X person-only detection
-- ByteTrack-based unique person IDs
-- Live visitor count and total unique visitors
-- Entry and exit counting using a virtual line
-- Per-customer dwell time
-- Path trail drawing and optional heatmap export
-- CSV visitor session logs with `id, entry_time, exit_time, dwell_time`
-- Streamlit UI with start and stop controls, source selector, confidence slider, and live dashboard
-- Accuracy-first defaults with optional FP16 on supported hardware
+## 1. Project Directory Layout
 
-## Project Structure
-
-```text
-cctv-shop-analytics/
-|-- app.py
-|-- analytics.py
-|-- config.yaml
-|-- detector.py
-|-- main.py
-|-- README.md
-|-- requirements.txt
-|-- tracker.py
-`-- utils.py
+```
+project/
+├── README.md               # This documentation file
+├── pyproject.toml         # Python package dependencies & metadata
+├── .env.example            # Environment variables template
+├── .gitignore              # Files/folders to exclude from git
+│
+├── configs/                # Configuration-driven design files
+│   ├── cameras.yaml        # Video sources, FPS, target zones
+│   ├── models.yaml         # Model filepaths, thresholds, parameters
+│   ├── zones.yaml          # Geometry of zones & crossing lines per camera
+│   ├── events.yaml         # Rules & durations for security events
+│   └── benchmark.yaml      # Benchmarking setup parameters
+│
+├── src/                    # Source code package
+│   ├── ingestion/          # Video loading and streaming
+│   ├── detection/          # Object detection wrappers (YOLO)
+│   ├── tracking/           # Multi-object trackers (ByteTrack/BoT-SORT)
+│   ├── analytics/          # Business logic (dwell time, count, trajectories)
+│   ├── events/             # Contextual events (intrusion, loitering, theft)
+│   ├── orchestration/      # Engines running baseline & adaptive systems
+│   ├── monitoring/         # Resource monitoring (CPU, RAM, GPU/VRAM)
+│   ├── database/           # PostgreSQL connection & schemas
+│   └── api/                # FastAPI webserver and websockets
+│
+├── scripts/                # Launch scripts for baseline & adaptive models
+├── tests/                  # Unit and integration tests
+└── outputs/                # Local storage for reports, video clips, and logs
 ```
 
-## Installation
+---
+
+## 2. Installation & Setup
+
+Ensure you are using the virtual environment `.venv` located at the root of the Ultralytics repository:
 
 ```bash
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
+# Verify virtual environment python and pip
+./.venv/bin/python --version
 ```
 
-## Run Streamlit UI
-
+Verify your GPU environment:
 ```bash
-streamlit run app.py
+nvidia-smi
 ```
 
-## Optional CLI Run
-
+Install the project in editable mode:
 ```bash
-python main.py --config config.yaml
+./.venv/bin/pip install -e .
 ```
 
-## UI Features
+---
 
-- Start and stop buttons
-- Input source selector for webcam, uploaded file, or RTSP stream
-- Confidence threshold slider
-- Tracking on and off toggle
-- Save video toggle
-- Heatmap toggle
-- Live metrics for total visitors, current people count, entries, exits, and average dwell time
-- CSV download after a run finishes or while it is running
+## 3. Configuration Loading System
 
-## Configuration
+Configurations are fully decoupled from application logic and located under the `configs/` directory.
 
-The system is configured from `config.yaml`.
+You can load and validate configurations programmatically in Python:
+```python
+from src.config import SystemConfig
 
-- `processing.frame_size`: Resize each frame to this square size for faster inference
-- `processing.device`: Use `"cpu"`, `"cuda:0"`, or `"auto"`
-- `tracking.enabled`: Default tracking state for the UI and CLI
-- `cameras`: Default camera blocks for CLI execution
-- `analytics.entry_line`: Virtual line used for entry and exit detection
-- `output.save_csv`: Enables per-track CSV export
-- `output.save_heatmap`: Saves a movement heatmap after processing ends
-- `ui.refresh_interval_ms`: Streamlit refresh cadence for live updates
+# Initialize and load all yaml settings
+cfg = SystemConfig(config_dir="configs")
 
-## Example Camera Configurations
+# Get configuration for a specific camera
+entrance_cfg = cfg.get_camera_config("entrance_01")
+print(f"Role: {entrance_cfg.role}, Source: {entrance_cfg.source}")
 
-```yaml
-cameras:
-  - camera_id: "front_door"
-    source: 0
-    display: true
-
-  - camera_id: "cash_counter"
-    source: "rtsp://username:password@192.168.1.20:554/stream"
-    display: false
-
-  - camera_id: "aisle_cam"
-    source: "videos/shop_floor.mp4"
-    display: true
+# Get crossing lines and polygon zones
+zones_cfg = cfg.get_camera_zones("entrance_01")
+print(f"Lines defined: {len(zones_cfg.lines)}")
 ```
 
-## Outputs
+---
 
-The system writes outputs to `outputs/<camera_id>/`:
+## 4. Running the Research and Benchmarking Pipelines
 
-- `annotated_output.mp4`
-- `tracking_data.csv`
-- `movement_heatmap.jpg`
+To run the complete MBA comparative research pipeline under identical hardware and environment constraints:
 
-## Development & CI/CD
+### Step 1: Download and Validate Datasets (Phase 2 & 3)
+Downloads standard tracking videos, generates synthetic fallback frames/videos (with moving targets and ground grids) if offline, standardizes splits, and creates a validation QC report:
+```bash
+./.venv/bin/python project/scripts/download_and_validate.py
+```
+*Report output: `project/reports/dataset_validation_report.md`*
 
-### Local Testing and Linting
-To keep the codebase clean and verify logic, we use `pytest` for unit testing and `ruff` for code style verification:
+### Step 2: Run Multi-Strategy Model Training (Phase 4 & 5)
+Executes 7 controlled training experiments (Pretrained base, Scratch yolov8n/yolov8s, Transfer learning, Augmentation trials, Hyperparameter tuning, and Domain fine-tuning) on the CPU:
+```bash
+./.venv/bin/python project/scripts/run_model_experiments.py
+```
+*Registry output: `project/results/experiment_registry.csv`*  
+*Report output: `project/reports/model_comparison_report.md`*
 
-1. **Install dev dependencies**:
-   ```bash
-   pip install pytest ruff
-   ```
+### Step 3: Run Tracker Comparisons (Phase 6)
+Executes a head-to-head empirical comparison of ByteTrack vs. BoT-SORT on the standardized tracking stream, recording latency, CPU loads, and track counts:
+```bash
+./.venv/bin/python project/scripts/run_tracking_experiments.py
+```
+*Report output: `project/reports/tracking_comparison_report.md`*
 
-2. **Run Linting**:
-   ```bash
-   ruff check .
-   ```
+### Step 4: Run Baseline vs. Adaptive Benchmark (Phase 11)
+Runs the comparative system benchmark comparing the standard continuous-inference engine (Baseline) and the event-driven state-machine engine (Adaptive) on a 500-frame sequence:
+```bash
+./.venv/bin/python project/scripts/benchmark.py --camera entrance_01 --max-frames 500
+```
+*Output output: `project/outputs/reports/report_entrance_01_*.json`*
 
-3. **Run Unit Tests**:
-   ```bash
-   pytest tests/
-   ```
+### Step 5: Compile Final Reports & MBA Thesis (Phase 12 & 13)
+Parses the benchmark results, calculates percentage changes, and generates the complete final MBA research thesis structured chapters:
+```bash
+./.venv/bin/python project/scripts/compile_final_reports.py
+```
+*Report outputs:*
+- `project/reports/security_event_report.md`
+- `project/reports/customer_analytics_report.md`
+- `project/reports/baseline_vs_adaptive_report.md`
+- `project/reports/final_mba_project_report.md` (complete academic report)
 
-### CI/CD Pipeline
-Every push and pull request to the `main` branch triggers a GitHub Actions workflow (`.github/workflows/ci.yml`) that:
-- Sets up Python 3.10.
-- Installs necessary system libraries (e.g. `libGL` for OpenCV).
-- Installs Python dependencies.
-- Runs `ruff` checks to enforce code quality.
-- Runs `pytest` to ensure all tests pass.
-
-## Notes
-
-- ByteTrack is strong at maintaining IDs during short occlusions and low-confidence detection gaps, but long full exits from view can still produce a new ID when the person returns.
-- For best entry and exit accuracy, place the virtual line near the doorway and tune `line_margin`.
-- On CPU, reduce `processing.frame_size` to `416` or `512` if the accuracy-first defaults are too heavy.
-- If tracking is disabled from the UI, the app still shows live detections and current count, but unique visitor counting and dwell analytics are intentionally limited.

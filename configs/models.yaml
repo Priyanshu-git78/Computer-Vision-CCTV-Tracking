@@ -1,0 +1,39 @@
+primary_detector:
+  model_type: "yolo"
+  path: "yolo26n.pt"  # Pretrained YOLO model in the repository root or download target
+  conf_threshold: 0.25
+  iou_threshold: 0.45
+  classes: [0]  # Person class in COCO
+  device: "cpu" # or cpu
+
+tracker:
+  tracker_type: "bytetrack"  # or botsort
+  track_high_thresh: 0.5
+  track_low_thresh: 0.1
+  new_track_thresh: 0.6
+  track_buffer: 30
+  match_thresh: 0.8
+
+specialist_models:
+  fire_smoke:
+    model_type: "yolo"
+    path: "models/fire_smoke/fire_smoke.pt"
+    conf_threshold: 0.35
+    iou_threshold: 0.45
+    classes: [0, 1]  # Fire, Smoke
+    device: "cpu"
+    enabled: true
+
+  theft:
+    model_type: "keypoints"
+    path: "models/theft/theft_pose.pt"
+    conf_threshold: 0.50
+    device: "cpu"
+    enabled: true
+
+  action_recognition:
+    model_type: "classification"
+    path: "models/action_recognition/action_rec.pt"
+    conf_threshold: 0.60
+    device: "cpu"
+    enabled: true

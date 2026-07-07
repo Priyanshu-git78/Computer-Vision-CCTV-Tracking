@@ -1,0 +1,21 @@
+cameras:
+  - camera_id: entrance_01
+    source: "data/raw/entrance.mp4"
+    role: "entrance"
+    target_fps: 10
+    enabled: true
+    resolution: [1920, 1080]
+
+  - camera_id: main_hall_01
+    source: "data/raw/main_hall.mp4"
+    role: "behavior_analytics"
+    target_fps: 15
+    enabled: true
+    resolution: [1920, 1080]
+
+  - camera_id: restricted_corridor_01
+    source: "data/raw/restricted.mp4"
+    role: "security"
+    target_fps: 10
+    enabled: true
+    resolution: [1920, 1080]

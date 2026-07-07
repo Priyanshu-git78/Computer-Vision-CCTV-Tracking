@@ -1,0 +1,46 @@
+cameras_zones:
+  entrance_01:
+    lines:
+      - name: main_entrance_line
+        start: [100, 400]
+        end: [1100, 400]
+        in_direction: "down" # "up", "down", "left", "right" depending on flow
+    zones:
+      - name: lobby_engagement_zone
+        points:
+          - [100, 100]
+          - [500, 100]
+          - [500, 500]
+          - [100, 500]
+        type: "engagement"
+        description: "Lobby customer interaction area"
+
+  main_hall_01:
+    zones:
+      - name: product_display_zone_a
+        points:
+          - [600, 200]
+          - [1200, 200]
+          - [1200, 800]
+          - [600, 800]
+        type: "engagement"
+        description: "Primary product showroom zone"
+      - name: staff_service_desk
+        points:
+          - [100, 600]
+          - [500, 600]
+          - [500, 900]
+          - [100, 900]
+        type: "service"
+        description: "Customer service and help desk"
+
+  restricted_corridor_01:
+    zones:
+      - name: server_room_entrance
+        points:
+          - [400, 100]
+          - [900, 100]
+          - [900, 700]
+          - [400, 700]
+        type: "restricted"
+        description: "High-security corridor near server room"

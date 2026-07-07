@@ -1,0 +1,24 @@
+loitering:
+  dwell_time_threshold_seconds: 15.0
+  check_interval_seconds: 1.0
+
+intrusion:
+  restricted_zones: ["server_room_entrance"]
+  min_confidence: 0.50
+
+abandoned_object:
+  stationary_duration_seconds: 30.0
+  owner_max_distance_pixels: 150.0
+  object_classes: [24, 26, 28]  # COCO class IDs: backpack, handbag, suitcase
+
+theft:
+  product_interaction_duration_seconds: 5.0
+  suspicious_pose_angle_threshold: 45.0  # angle criteria for suspicious arm extensions
+
+fighting:
+  consecutive_active_frames: 5
+  fps_sample_rate: 15
+
+fall:
+  aspect_ratio_threshold: 0.5  # height/width threshold change rate
+  velocity_threshold: 200.0   # downward pixel velocity threshold

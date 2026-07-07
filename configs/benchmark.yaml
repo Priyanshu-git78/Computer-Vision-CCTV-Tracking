@@ -1,0 +1,11 @@
+benchmark:
+  duration_seconds: 60.0
+  monitor_interval_seconds: 0.5
+  warmup_frames: 10
+  save_annotated_video: true
+  output_dir: "outputs/reports"
+  
+  test_sources:
+    entrance_01: "data/raw/entrance.mp4"
+    main_hall_01: "data/raw/main_hall.mp4"
+    restricted_corridor_01: "data/raw/restricted.mp4"

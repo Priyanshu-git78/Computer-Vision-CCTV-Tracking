@@ -1,0 +1,3 @@
+timestamp,dataset,epochs,duration_seconds,precision,recall,mAP50,mAP50_95
+2026-07-07 23:18:14,COCO128_Person,3,4.73,0.0000,0.0000,0.0000,0.0000
+2026-07-07 23:18:56,COCO128_Person,3,28.88,0.7780,0.3307,0.3733,0.2954
