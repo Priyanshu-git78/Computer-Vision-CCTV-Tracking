@@ -22,6 +22,7 @@ models/**/*.pt
 models/**/*.onnx
 models/**/*.engine
 *.pt
+hf_upload/
 
 # Outputs
 outputs/events/*
