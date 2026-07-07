@@ -41,17 +41,17 @@ def update_toc_exact():
         # Row 6 (Chapter III)
         t.cell(6, 2).text = "14–15"
         # Row 7 (Chapter IV)
-        t.cell(7, 2).text = "16–21"
+        t.cell(7, 2).text = "16–20"
         # Row 8 (Chapter V)
-        t.cell(8, 2).text = "22–25"
+        t.cell(8, 2).text = "21–24"
         # Row 9 (Chapter VI)
-        t.cell(9, 2).text = "26–27"
+        t.cell(9, 2).text = "25–26"
         # Row 10 (Chapter VII)
-        t.cell(10, 2).text = "28–29"
+        t.cell(10, 2).text = "27–28"
         # Row 11 (Bibliography)
-        t.cell(11, 2).text = "30"
+        t.cell(11, 2).text = "29"
         # Row 12 (Annexures)
-        t.cell(12, 2).text = "31–34"
+        t.cell(12, 2).text = "30–33"
 
         doc.save(doc_path)
         logger.info(f"Saved successfully: {doc_path}")
